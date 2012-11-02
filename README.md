@@ -1,6 +1,6 @@
 # Processing-mode
  Emacs major-mode for Processing.
-
+ とりあえず、自分用に作っていく。
 
 ## Requirements
  * processing-2.0b6 or later.
