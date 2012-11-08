@@ -1,5 +1,5 @@
 ;;; processing-mode for emacs
-;;; processing-mode.el ver. 0.1
+;;; processing-mode.el
 ;;; by Naoya Otsuka
 
 (setq auto-mode-alist
@@ -18,23 +18,23 @@
   (use-local-map processing-keymap)
   )
 
+
+(defvar processing-path
+  ""
+  "Processing directory path.")
+
+
 (defun processing-java-command ()
-  (concat "processing-java"
+  (concat processing-path "processing-java"
 	  " --sketch=" default-directory
 	  " --force"))
 
-(defun run ()
-  "Preprocess, compile, and run a sketch."
-  (interactive)
-  (shell-command
+(defun run-command ()
    (concat (processing-java-command)
   	   " --output=" default-directory "output"
-  	   " --run"
-  	   " &")))
+  	   " --run"))
 
-(defun export ()
-  "Export an application"
-  (interactive)
+(defun export-command ()
   (let ((platform
 	 (cond ((eq system-type 'gnu/linux)
 		"linux")
@@ -42,10 +42,24 @@
 		("macosx"))
 	       ((eq system-type 'windows-nt)
 		("windows")))))
-    (shell-command
-     (concat (processing-java-command)
-	     " --output=" default-directory "export/" platform
-	     " --export --platform=" platform " --bits=" "64"
-	     " &"))))
+    (concat (processing-java-command)
+	    " --output=" default-directory "export/" platform
+	    " --export --platform=" platform " --bits=" "64")))
+
+
+(defun commander (command)
+  "execute command"
+  (shell-command 
+   (concat command " &")))
+
+(defun run ()
+  "Preprocess, compile, and run a sketch."
+  (interactive)
+  (commander (run-command)))
+
+(defun export ()
+  "Export an application."
+  (interactive)
+  (commander (export-command)))
 
 (provide 'processing-mode)
