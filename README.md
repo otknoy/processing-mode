@@ -8,8 +8,8 @@
 
 ## Install
  * add your .emacs.d/init.el to
- (require 'processing-mode)
- (setq processing-path "/path/to/processing-2.0**/")
+    (require 'processing-mode)
+    (setq processing-path "/path/to/processing-2.0**/")
 
 ## How to Use
  * C-c C-r: Preprocess, compile, and run a sketch.
