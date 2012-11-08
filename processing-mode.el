@@ -14,17 +14,38 @@
   (run-hooks 'processing-mode-hook)
   (setq processing-keymap (make-keymap))
   (define-key processing-keymap "\C-c\C-r" 'run)
+  (define-key processing-keymap "\C-c\C-e" 'export)
   (use-local-map processing-keymap)
   )
 
-  
+(defun processing-java-command ()
+  (concat "processing-java"
+	  " --sketch=" default-directory
+	  " --force"))
+
 (defun run ()
-  "sketch run"
+  "Preprocess, compile, and run a sketch."
   (interactive)
   (shell-command
-   (concat "processing-java"
-	   " --sketch=" default-directory
-	   " --output=" default-directory "output"
-	   " --run --force &")))
+   (concat (processing-java-command)
+  	   " --output=" default-directory "output"
+  	   " --run"
+  	   " &")))
+
+(defun export ()
+  "Export an application"
+  (interactive)
+  (let ((platform
+	 (cond ((eq system-type 'gnu/linux)
+		"linux")
+	       ((eq system-type 'darwin)
+		("macosx"))
+	       ((eq system-type 'windows-nt)
+		("windows")))))
+    (shell-command
+     (concat (processing-java-command)
+	     " --output=" default-directory "export/" platform
+	     " --export --platform=" platform " --bits=" "64"
+	     " &"))))
 
 (provide 'processing-mode)
